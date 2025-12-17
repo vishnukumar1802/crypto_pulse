@@ -10,11 +10,17 @@ const cache = {
     ohlc: {}
 };
 
-const CACHE_DURATION = 60 * 1000; // 1 minute cache for free tier safety
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache to avoid rate limits
+const MARKET_CACHE_DURATION = 2 * 60 * 1000; // 2 minutes for market list
+
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
 
 const api = axios.create({
     baseURL: API_URL,
-    timeout: 10000,
+    timeout: 15000,
+    headers: API_KEY ? {
+        'x-cg-demo-api-key': API_KEY
+    } : {}
 });
 
 export const getGlobalStats = async () => {
@@ -28,12 +34,12 @@ export const getGlobalStats = async () => {
         cache.global = { data: response.data.data, timestamp: now };
         return response.data.data;
     } catch (error) {
-        console.error("Global stats error:", error);
-        return cache.global.data; // Return stale data if fail
+        console.warn("Global stats fetch failed, using cache:", error.message);
+        // Return cached data even if expired
+        if (cache.global.data) return cache.global.data;
+        return null;
     }
 };
-
-const MARKET_CACHE_DURATION = 30 * 1000; // 30 seconds for list
 
 export const getMarkets = async (vsCurrency = 'usd', page = 1, perPage = 250) => {
     const cacheKey = `markets-${vsCurrency}-${page}-${perPage}`;
@@ -57,12 +63,14 @@ export const getMarkets = async (vsCurrency = 'usd', page = 1, perPage = 250) =>
         });
 
         // Cache this page
-        if (!cache.markets) cache.markets = {}; // Ensure object exists if we change structure
+        if (!cache.markets) cache.markets = {};
         cache.markets[cacheKey] = { data: response.data, timestamp: now };
 
         return response.data;
     } catch (error) {
-        console.error("Markets error:", error);
+        console.warn("Markets fetch failed, using cache:", error.message);
+        // Fallback to expired cache if available
+        if (cache.markets[cacheKey]) return cache.markets[cacheKey].data;
         throw error;
     }
 };
