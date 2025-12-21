@@ -207,7 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Project Link:** [https://github.com/vishnukumar1802/crypto_pulse](https://github.com/vishnukumar1802/crypto_pulse)
 
-**Live Demo:** [https://crypto-pulse-ten-self.vercel.app/](https://crypto-pulse-ten-self.vercel.app/)
+**Live Demo:** crypto-pulse-five-red.vercel.app
 
 ---
 
