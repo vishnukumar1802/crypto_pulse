@@ -118,7 +118,7 @@ A modern, feature-rich Progressive Web App (PWA) for tracking cryptocurrency pri
 4. Add environment variables in Vercel dashboard
 5. Deploy!
 
-**Live Demo:** [https://crypto-pulse-ten-self.vercel.app/](https://crypto-pulse-ten-self.vercel.app/)
+**Live Demo:** [https://crypto-pulse-ten-self.vercel.app/](https://crypto-pulse-ten-self.vercel.app)
 
 ### Environment Variables on Vercel
 Make sure to add all `VITE_*` environment variables in:
